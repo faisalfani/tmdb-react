@@ -2,8 +2,7 @@
 
 @layer base {
   body {
-    background-color: #141414;
-    color: #FFFFFF;
+    @apply bg-neutral-950 text-white;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     margin: 0;
     padding: 0;
@@ -14,24 +13,67 @@
   }
 }
 
-/* Custom scrollbar for horizontal carousels and page */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+@layer components {
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center transition active:scale-95 cursor-pointer select-none disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100;
+  }
+
+  .btn-primary {
+    @apply bg-white text-black hover:bg-neutral-200 font-bold shadow-md;
+  }
+
+  .btn-secondary {
+    @apply bg-neutral-800/80 hover:bg-neutral-700 text-white font-semibold backdrop-blur-md border border-neutral-700;
+  }
+
+  .btn-outline {
+    @apply bg-transparent hover:bg-white/10 text-white font-medium border border-neutral-600;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent hover:bg-white/10 text-neutral-300 hover:text-white;
+  }
+
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-semibold;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs gap-1.5 rounded-md;
+  }
+
+  .btn-md {
+    @apply px-5 py-2.5 text-sm gap-2 rounded-md;
+  }
+
+  .btn-lg {
+    @apply px-6 py-3 text-base gap-2.5 rounded-lg;
+  }
+
+  /* Rating Badge variant */
+  .badge-rating {
+    @apply inline-flex items-center gap-1 font-semibold rounded-md bg-black/70 backdrop-blur-md text-amber-400 border border-amber-500/20;
+  }
+
+  .badge-rating-sm {
+    @apply px-1.5 py-0.5 text-xs;
+  }
+
+  .badge-rating-sm svg {
+    @apply w-3 h-3;
+  }
+
+  .badge-rating-md {
+    @apply px-2.5 py-1 text-sm;
+  }
+
+  .badge-rating-md svg {
+    @apply w-4 h-4;
+  }
 }
 
-/* Smooth horizontal scroll container */
-.carousel-container {
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Subtle focus ring styling for a11y */
+/* Accessible focus ring for keyboard navigation */
 :focus-visible {
-  outline: 2px solid #E50914;
-  outline-offset: 2px;
+  @apply outline-2 outline-red-600 outline-offset-2;
 }
-
