@@ -1,14 +1,10 @@
 import { Outlet } from 'react-router-dom';
 import { Navbar } from '@/views/shared/layouts/Navbar';
 
-interface RootLayoutProps {
-  onSearchClick?: () => void;
-}
-
-export function RootLayout({ onSearchClick }: RootLayoutProps) {
+export function RootLayout() {
   return (
     <div className="min-h-screen bg-neutral-950 text-white">
-      <Navbar onSearchClick={onSearchClick} />
+      <Navbar />
       <main>
         <Outlet />
       </main>

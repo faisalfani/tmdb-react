@@ -4,6 +4,7 @@ import { useDisclosure } from '@/hooks/useDisclosure';
 import type { MediaItem } from '@/modules/shared/types';
 import { MediaDetailModal } from '@/views/shared/components/MediaDetailModal';
 import { MoviesView } from '@/views/movies';
+import { SearchView } from '@/views/search';
 import { RootLayout } from '@/views/shared/layouts/RootLayout';
 import { WatchlistView } from '@/views/watchlist';
 
@@ -21,20 +22,10 @@ export function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          element={
-            <RootLayout
-              onSearchClick={() => {
-                console.log('Search clicked');
-              }}
-            />
-          }
-        >
+        <Route element={<RootLayout />}>
           <Route path="/" element={<MoviesView onMediaSelect={handleMediaSelect} />} />
-          <Route
-            path="/watchlist"
-            element={<WatchlistView onMediaSelect={handleMediaSelect} />}
-          />
+          <Route path="/watchlist" element={<WatchlistView onMediaSelect={handleMediaSelect} />} />
+          <Route path="/search" element={<SearchView onMediaSelect={handleMediaSelect} />} />
         </Route>
       </Routes>
 
