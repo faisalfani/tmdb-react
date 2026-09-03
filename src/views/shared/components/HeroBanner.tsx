@@ -25,8 +25,8 @@ export function HeroBanner({ media, isLoading, onPlay }: HeroBannerProps) {
     [media?.release_date, media?.first_air_date]
   );
   const backdropUrl = useMemo(
-    () => getImageUrl(media?.backdrop_path, 'original'),
-    [media?.backdrop_path]
+    () => getImageUrl(media?.backdrop_path || media?.poster_path, 'original'),
+    [media?.backdrop_path, media?.poster_path]
   );
   const isSaved = useMemo(() => {
     return Boolean(media && watchlistMovies?.some((item) => item.id === media.id));
@@ -46,48 +46,53 @@ export function HeroBanner({ media, isLoading, onPlay }: HeroBannerProps) {
   }
 
   return (
-    <div className="relative w-full h-[65vh] md:h-[80vh] min-h-[480px] select-none">
+    <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] min-h-[440px] sm:min-h-[500px] select-none">
       <div className="absolute inset-0">
         <img
           src={backdropUrl}
           alt={title}
           className="w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-transparent" />
+        {/* gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/60 to-neutral-950/20" />
         <div className="absolute inset-0 bg-gradient-to-r from-neutral-950 via-neutral-950/70 to-transparent w-full md:w-3/4" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto h-full flex flex-col justify-end pb-12 md:pb-20 px-4 md:px-12 space-y-4">
-        <div className="flex items-center gap-3">
-          <RatingBadge rating={media.vote_average} size="md" />
-          <span className="text-sm font-medium text-neutral-300 bg-neutral-900/60 backdrop-blur-sm px-2.5 py-1 rounded-md border border-neutral-700">
-            {year}
-          </span>
+      <div className="relative z-10 max-w-7xl mx-auto h-full flex flex-col justify-end pb-8 sm:pb-14 md:pb-20 px-4 md:px-12 space-y-2.5 sm:space-y-4">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          {media.vote_average > 0 && <RatingBadge rating={media.vote_average} size="md" />}
+          {year && (
+            <span className="text-xs sm:text-sm font-medium text-neutral-300 bg-neutral-900/80 backdrop-blur-sm px-2.5 py-1 rounded-md border border-neutral-700/80">
+              {year}
+            </span>
+          )}
         </div>
 
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-white max-w-2xl drop-shadow-lg">
+        <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white max-w-3xl drop-shadow-lg leading-tight line-clamp-2">
           {title}
         </h1>
 
-        <p className="text-sm md:text-base text-neutral-300 max-w-xl line-clamp-3 leading-relaxed drop-shadow">
+        <p className="text-xs sm:text-sm md:text-base text-neutral-300 max-w-xl line-clamp-2 sm:line-clamp-3 leading-relaxed drop-shadow">
           {media.overview}
         </p>
 
-        <div className="flex items-center gap-3 pt-3">
+        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-2 sm:pt-3">
           <Button
             variant="primary"
-            size="lg"
-            icon={<Play className="w-5 h-5 fill-black" />}
+            size="md"
+            icon={<Play className="w-4 h-4 fill-black" />}
             onClick={() => onPlay?.(media)}
+            className="text-xs sm:text-sm"
           >
             Watch Now
           </Button>
           <Button
             variant={isSaved ? 'danger' : 'secondary'}
-            size="lg"
-            icon={isSaved ? <Check className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+            size="md"
+            icon={isSaved ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
             onClick={handleToggleWatchlist}
             disabled={isTogglePending}
+            className="text-xs sm:text-sm"
           >
             {isSaved ? 'In Watchlist' : 'Watchlist'}
           </Button>

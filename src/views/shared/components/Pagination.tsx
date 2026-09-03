@@ -39,13 +39,13 @@ export const Pagination = ({
   };
 
   return (
-    <div className="w-full justify-center flex pt-4">
-      <div className="flex items-center gap-2">
+    <div className="w-full justify-center flex pt-6 pb-2">
+      <div className="flex items-center gap-1.5 sm:gap-2 max-w-full overflow-x-auto px-2">
         <button
           type="button"
           disabled={currentPage === 1}
           onClick={onPrevPage}
-          className="px-3.5 py-2 text-sm font-medium rounded-lg cursor-pointer bg-neutral-800 border border-neutral-700/80 text-neutral-200 hover:bg-neutral-700/80 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition"
+          className="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg cursor-pointer bg-neutral-800 border border-neutral-700/80 text-neutral-200 hover:bg-neutral-700/80 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition shrink-0"
         >
           Prev
         </button>
@@ -56,7 +56,7 @@ export const Pagination = ({
             type="button"
             disabled={currentPage === page}
             onClick={() => onPageChange(page)}
-            className={`px-3.5 py-2 text-sm font-medium rounded-lg cursor-pointer transition ${
+            className={`min-w-[32px] sm:min-w-[38px] px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg cursor-pointer transition shrink-0 ${
               currentPage === page
                 ? 'bg-red-600 text-white font-bold border border-red-500 shadow-md'
                 : 'bg-neutral-800 border border-neutral-700/80 text-neutral-300 hover:bg-neutral-700/80 hover:text-white'
@@ -70,7 +70,7 @@ export const Pagination = ({
           type="button"
           disabled={currentPage === totalPage}
           onClick={onNextPage}
-          className="px-3.5 py-2 text-sm font-medium rounded-lg cursor-pointer bg-neutral-800 border border-neutral-700/80 text-neutral-200 hover:bg-neutral-700/80 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition"
+          className="px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-lg cursor-pointer bg-neutral-800 border border-neutral-700/80 text-neutral-200 hover:bg-neutral-700/80 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition shrink-0"
         >
           Next
         </button>

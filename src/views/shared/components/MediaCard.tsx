@@ -11,6 +11,7 @@ interface MediaCardProps {
   onClick?: (item: MediaItem) => void;
   showRating?: boolean;
   isInWatchlist?: boolean;
+  className?: string;
 }
 
 export function MediaCard({
@@ -18,6 +19,7 @@ export function MediaCard({
   onClick,
   showRating = true,
   isInWatchlist,
+  className = '',
 }: MediaCardProps) {
   const { data: watchlistMovies } = useWatchlistMovies();
   const isSaved = isInWatchlist ?? Boolean(watchlistMovies?.some((m) => m.id === item.id));
@@ -37,36 +39,36 @@ export function MediaCard({
         }
       }}
       aria-label={`View details for ${title}`}
-      className="group relative flex-shrink-0 w-36 sm:w-44 md:w-52 cursor-pointer select-none rounded-lg overflow-hidden bg-neutral-900 border border-neutral-800/80 hover:border-neutral-600 transition-all duration-300 hover:scale-105 hover:z-10 shadow-lg hover:shadow-2xl"
+      className={`group relative flex-shrink-0 cursor-pointer select-none rounded-xl overflow-hidden bg-neutral-900 border border-neutral-800/80 hover:border-neutral-600 transition-all duration-300 hover:scale-[1.03] hover:z-10 shadow-lg hover:shadow-2xl ${className}`}
     >
-      <div className="relative aspect-[2/3] overflow-hidden bg-neutral-900">
+      <div className="relative aspect-[2/3] w-full overflow-hidden bg-neutral-900">
         <ImageWithFallback
           src={getImageUrl(item.poster_path, 'w500')}
           alt={title}
-          className="w-full h-full object-cover group-hover:opacity-90 transition-opacity duration-300"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
 
         {isSaved && (
           <div
             title="In Watchlist"
-            className="absolute top-2 left-2 p-1.5 rounded-md bg-red-600 text-white shadow-md"
+            className="absolute top-2 left-2 p-1.5 rounded-lg bg-red-600/90 text-white shadow-md backdrop-blur-xs"
           >
             <Bookmark className="w-3.5 h-3.5 fill-current" />
           </div>
         )}
 
-        {showRating && (
+        {showRating && item.vote_average > 0 && (
           <div className="absolute top-2 right-2">
             <RatingBadge rating={item.vote_average} size="sm" />
           </div>
         )}
       </div>
 
-      <div className="p-3">
-        <h3 className="font-semibold text-sm text-neutral-100 truncate group-hover:text-white transition-colors">
+      <div className="p-2.5 sm:p-3">
+        <h3 className="font-semibold text-xs sm:text-sm text-neutral-100 truncate group-hover:text-white transition-colors">
           {title}
         </h3>
-        <p className="text-xs text-neutral-400 mt-1 font-medium">{year}</p>
+        <p className="text-[11px] sm:text-xs text-neutral-400 mt-0.5 sm:mt-1 font-medium">{year}</p>
       </div>
     </div>
   );

@@ -14,10 +14,10 @@ export function MoviesView({ onMediaSelect }: MoviesViewProps) {
   const { data: upcoming, isLoading: upcomingLoading } = useUpcomingMovies();
 
   return (
-    <div className="space-y-4 pb-16">
+    <div className="space-y-2 sm:space-y-4 pb-16">
       <HeroMovieBanner onPlay={onMediaSelect} />
 
-      <div className="-mt-16 md:-mt-24 relative z-20 space-y-6">
+      <div className="-mt-4 sm:-mt-10 md:-mt-16 relative z-20 space-y-4 sm:space-y-6">
         <MediaCarousel
           title="Popular Movies"
           items={popular}

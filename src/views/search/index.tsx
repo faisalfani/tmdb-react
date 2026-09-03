@@ -29,30 +29,37 @@ export function SearchView({ onMediaSelect }: SearchViewProps) {
   };
 
   return (
-    <div className="pt-24 md:pt-32 px-4 md:px-12 max-w-7xl mx-auto pb-16 space-y-6">
+    <div className="pt-20 sm:pt-24 md:pt-32 px-4 md:px-12 max-w-7xl mx-auto pb-16 space-y-6">
       {query.length > 1 && (
-        <div className="space-y-4">
+        <div className="space-y-4 sm:space-y-6">
           {isShowResults && (
-            <p className="text-sm text-neutral-400">
+            <p className="text-xs sm:text-sm text-neutral-400">
               {totalResults.toLocaleString()} result{totalResults !== 1 ? 's' : ''} for{' '}
               <span className="text-white font-medium">"{query}"</span>
             </p>
           )}
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6">
             {isShowSkeleton &&
-              Array.from({ length: 10 }).map((_, i) => <MediaCardSkeleton key={i} />)}
+              Array.from({ length: 12 }).map((_, i) => (
+                <MediaCardSkeleton key={i} className="w-full" />
+              ))}
 
             {isShowResults &&
               results.map((item) => (
-                <MediaCard key={item.id} item={item} onClick={onMediaSelect} />
+                <MediaCard
+                  key={item.id}
+                  item={item}
+                  onClick={onMediaSelect}
+                  className="w-full"
+                />
               ))}
           </div>
 
           {isShowEmpty && (
-            <div className="py-20 text-center space-y-2">
-              <p className="text-neutral-300 font-medium">No results found</p>
-              <p className="text-sm text-neutral-500">
+            <div className="py-16 sm:py-20 text-center space-y-2 px-4">
+              <p className="text-neutral-300 font-medium text-base">No results found</p>
+              <p className="text-xs sm:text-sm text-neutral-500">
                 Try a different keyword or check your spelling.
               </p>
             </div>
@@ -70,7 +77,7 @@ export function SearchView({ onMediaSelect }: SearchViewProps) {
       )}
 
       {!query && (
-        <div className="py-16 text-center text-neutral-500 text-sm">
+        <div className="py-16 sm:py-24 text-center text-neutral-500 text-xs sm:text-sm">
           Start typing to search...
         </div>
       )}
