@@ -1,17 +1,19 @@
-import type { ComponentProps } from 'react';
 import { useTrendingHero } from '@/modules/movies/queries';
+import type { MediaItem } from '@/modules/shared/types';
 import { HeroBanner } from '@/views/shared/components/HeroBanner';
 
-type HeroMovieBannerProps = Omit<ComponentProps<typeof HeroBanner>, 'media' | 'isLoading'>;
+interface HeroMovieBannerProps {
+  onPlay?: (media: MediaItem) => void;
+}
 
-export function HeroMovieBanner(props: HeroMovieBannerProps) {
+export function HeroMovieBanner({ onPlay }: HeroMovieBannerProps) {
   const { data: movies, isLoading } = useTrendingHero();
 
   return (
     <HeroBanner
       media={movies?.[0]}
       isLoading={isLoading}
-      {...props}
+      onPlay={onPlay}
     />
   );
 }

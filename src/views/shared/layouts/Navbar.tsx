@@ -1,5 +1,7 @@
+import { useMemo } from 'react';
 import { Bookmark, Film, Search } from 'lucide-react';
 import { Link, NavLink } from 'react-router-dom';
+import { useWatchlistMovies } from '@/modules/watchlist/queries';
 
 interface NavItem {
   id: string;
@@ -15,10 +17,12 @@ const NAV_ITEMS: NavItem[] = [
 
 interface NavbarProps {
   onSearchClick?: () => void;
-  watchlistCount?: number;
 }
 
-export function Navbar({ onSearchClick, watchlistCount = 0 }: NavbarProps) {
+export function Navbar({ onSearchClick }: NavbarProps) {
+  const { data: watchlistMovies } = useWatchlistMovies();
+  const watchlistCount = useMemo(() => watchlistMovies?.length ?? 0, [watchlistMovies]);
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-neutral-950/80 backdrop-blur-md border-b border-neutral-800/80">
       <div className="max-w-7xl mx-auto px-4 md:px-12 h-16 md:h-20 flex items-center justify-between">

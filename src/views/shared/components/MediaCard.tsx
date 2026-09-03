@@ -1,4 +1,6 @@
+import { Bookmark } from 'lucide-react';
 import type { MediaItem } from '@/modules/shared/types';
+import { useWatchlistMovies } from '@/modules/watchlist/queries';
 import { ImageWithFallback } from '@/views/shared/components/ImageWithFallback';
 import { RatingBadge } from '@/views/shared/components/RatingBadge';
 import { getImageUrl } from '@/utils/constants';
@@ -8,9 +10,18 @@ interface MediaCardProps {
   item: MediaItem;
   onClick?: (item: MediaItem) => void;
   showRating?: boolean;
+  isInWatchlist?: boolean;
 }
 
-export function MediaCard({ item, onClick, showRating = true }: MediaCardProps) {
+export function MediaCard({
+  item,
+  onClick,
+  showRating = true,
+  isInWatchlist,
+}: MediaCardProps) {
+  const { data: watchlistMovies } = useWatchlistMovies();
+  const isSaved = isInWatchlist ?? Boolean(watchlistMovies?.some((m) => m.id === item.id));
+
   const title = getMediaTitle(item);
   const year = formatReleaseYear(item.release_date || item.first_air_date);
 
@@ -34,6 +45,16 @@ export function MediaCard({ item, onClick, showRating = true }: MediaCardProps) 
           alt={title}
           className="w-full h-full object-cover group-hover:opacity-90 transition-opacity duration-300"
         />
+
+        {isSaved && (
+          <div
+            title="In Watchlist"
+            className="absolute top-2 left-2 p-1.5 rounded-md bg-red-600 text-white shadow-md"
+          >
+            <Bookmark className="w-3.5 h-3.5 fill-current" />
+          </div>
+        )}
+
         {showRating && (
           <div className="absolute top-2 right-2">
             <RatingBadge rating={item.vote_average} size="sm" />

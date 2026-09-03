@@ -1,6 +1,8 @@
-import { useMemo } from 'react';
-import { Info, Play } from 'lucide-react';
+import { useCallback, useMemo } from 'react';
+import { Check, Play, Plus } from 'lucide-react';
 import type { MediaItem } from '@/modules/shared/types';
+import { useToggleWatchlist } from '@/modules/watchlist/mutations';
+import { useWatchlistMovies } from '@/modules/watchlist/queries';
 import { Button } from '@/views/shared/components/Button';
 import { RatingBadge } from '@/views/shared/components/RatingBadge';
 import { HeroBannerSkeleton } from '@/views/shared/components/Skeleton';
@@ -11,10 +13,12 @@ export interface HeroBannerProps {
   media?: MediaItem;
   isLoading?: boolean;
   onPlay?: (media: MediaItem) => void;
-  onMoreInfo?: (media: MediaItem) => void;
 }
 
-export function HeroBanner({ media, isLoading, onPlay, onMoreInfo }: HeroBannerProps) {
+export function HeroBanner({ media, isLoading, onPlay }: HeroBannerProps) {
+  const { data: watchlistMovies } = useWatchlistMovies();
+  const { mutate: onToggleWatchlist, isPending: isTogglePending } = useToggleWatchlist();
+
   const title = useMemo(() => getMediaTitle(media), [media]);
   const year = useMemo(
     () => formatReleaseYear(media?.release_date || media?.first_air_date),
@@ -24,6 +28,18 @@ export function HeroBanner({ media, isLoading, onPlay, onMoreInfo }: HeroBannerP
     () => getImageUrl(media?.backdrop_path, 'original'),
     [media?.backdrop_path]
   );
+  const isSaved = useMemo(() => {
+    return Boolean(media && watchlistMovies?.some((item) => item.id === media.id));
+  }, [media, watchlistMovies]);
+
+  const handleToggleWatchlist = useCallback(() => {
+    if (!media) return;
+    onToggleWatchlist({
+      media_type: media.media_type || 'movie',
+      media_id: media.id,
+      watchlist: !isSaved,
+    });
+  }, [media, isSaved, onToggleWatchlist]);
 
   if (isLoading || !media) {
     return <HeroBannerSkeleton />;
@@ -67,12 +83,13 @@ export function HeroBanner({ media, isLoading, onPlay, onMoreInfo }: HeroBannerP
             Watch Now
           </Button>
           <Button
-            variant="secondary"
+            variant={isSaved ? 'danger' : 'secondary'}
             size="lg"
-            icon={<Info className="w-5 h-5" />}
-            onClick={() => onMoreInfo?.(media)}
+            icon={isSaved ? <Check className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+            onClick={handleToggleWatchlist}
+            disabled={isTogglePending}
           >
-            More Info
+            {isSaved ? 'In Watchlist' : 'Watchlist'}
           </Button>
         </div>
       </div>

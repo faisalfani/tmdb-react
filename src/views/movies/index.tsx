@@ -7,33 +7,33 @@ interface MoviesViewProps {
   onMediaSelect?: (media: MediaItem) => void;
 }
 
-export function MoviesView(props: MoviesViewProps) {
+export function MoviesView({ onMediaSelect }: MoviesViewProps) {
   const { data: popular, isLoading: popularLoading } = usePopularMovies();
   const { data: topRated, isLoading: topRatedLoading } = useTopRatedMovies();
   const { data: nowPlaying, isLoading: nowPlayingLoading } = useNowPlayingMovies();
 
   return (
     <div className="space-y-4 pb-16">
-      <HeroMovieBanner onMoreInfo={props.onMediaSelect} onPlay={props.onMediaSelect} />
+      <HeroMovieBanner onPlay={onMediaSelect} />
 
       <div className="-mt-16 md:-mt-24 relative z-20 space-y-6">
         <MediaCarousel
           title="Popular Movies"
           items={popular}
           isLoading={popularLoading}
-          onItemClick={props.onMediaSelect}
+          onItemClick={onMediaSelect}
         />
         <MediaCarousel
           title="Top Rated"
           items={topRated}
           isLoading={topRatedLoading}
-          onItemClick={props.onMediaSelect}
+          onItemClick={onMediaSelect}
         />
         <MediaCarousel
           title="Now Playing in Theatres"
           items={nowPlaying}
           isLoading={nowPlayingLoading}
-          onItemClick={props.onMediaSelect}
+          onItemClick={onMediaSelect}
         />
       </div>
     </div>

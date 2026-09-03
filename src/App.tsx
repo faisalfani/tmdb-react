@@ -1,13 +1,22 @@
 import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useDisclosure } from '@/hooks/useDisclosure';
 import type { MediaItem } from '@/modules/shared/types';
-import { MediaDetailModal } from '@/views/details';
+import { MediaDetailModal } from '@/views/shared/components/MediaDetailModal';
 import { MoviesView } from '@/views/movies';
 import { RootLayout } from '@/views/shared/layouts/RootLayout';
 import { WatchlistView } from '@/views/watchlist';
 
 export function App() {
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
+  const modal = useDisclosure({
+    onClose: () => setSelectedMedia(null),
+  });
+
+  const handleMediaSelect = (media: MediaItem) => {
+    setSelectedMedia(media);
+    modal.onOpen();
+  };
 
   return (
     <BrowserRouter>
@@ -21,18 +30,18 @@ export function App() {
             />
           }
         >
+          <Route path="/" element={<MoviesView onMediaSelect={handleMediaSelect} />} />
           <Route
-            path="/"
-            element={<MoviesView onMediaSelect={(media) => setSelectedMedia(media)} />}
+            path="/watchlist"
+            element={<WatchlistView onMediaSelect={handleMediaSelect} />}
           />
-          <Route path="/watchlist" element={<WatchlistView />} />
         </Route>
       </Routes>
 
       <MediaDetailModal
         media={selectedMedia}
-        isOpen={Boolean(selectedMedia)}
-        onClose={() => setSelectedMedia(null)}
+        isOpen={modal.isOpen}
+        onClose={modal.onClose}
       />
     </BrowserRouter>
   );

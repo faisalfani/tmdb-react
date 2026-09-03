@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
-import { ArrowLeft, Clock, Film, Play, X } from 'lucide-react';
+import { ArrowLeft, Check, Clock, Film, Play, Plus, X } from 'lucide-react';
 import { useMediaDetails } from '@/modules/details/queries';
 import type { MediaItem } from '@/modules/shared/types';
+import { useToggleWatchlist } from '@/modules/watchlist/mutations';
+import { useWatchlistMovies } from '@/modules/watchlist/queries';
 import { Button } from '@/views/shared/components/Button';
 import { ImageWithFallback } from '@/views/shared/components/ImageWithFallback';
 import { RatingBadge } from '@/views/shared/components/RatingBadge';
@@ -23,6 +25,12 @@ export function MediaDetailModal({ media, isOpen, onClose }: MediaDetailModalPro
   const mediaId = media?.id ?? null;
 
   const { data: detail, isLoading } = useMediaDetails(mediaType, mediaId, isOpen);
+  const { data: watchlistMovies } = useWatchlistMovies();
+  const { mutate: onToggleWatchlist, isPending: isTogglePending } = useToggleWatchlist();
+
+  const isSaved = useMemo(() => {
+    return Boolean(mediaId && watchlistMovies?.some((item) => item.id === mediaId));
+  }, [mediaId, watchlistMovies]);
 
   useEffect(() => {
     setIsPlayingTrailer(false);
@@ -44,6 +52,15 @@ export function MediaDetailModal({ media, isOpen, onClose }: MediaDetailModalPro
   const cast = useMemo(() => {
     return (detail?.credits?.cast || []).slice(0, 6);
   }, [detail]);
+
+  const handleToggleWatchlist = useCallback(() => {
+    if (!media) return;
+    onToggleWatchlist({
+      media_type: mediaType,
+      media_id: media.id,
+      watchlist: !isSaved,
+    });
+  }, [media, mediaType, isSaved, onToggleWatchlist]);
 
   if (!media) return null;
 
@@ -97,7 +114,7 @@ export function MediaDetailModal({ media, isOpen, onClose }: MediaDetailModalPro
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/40 to-transparent" />
 
-                <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between gap-4">
+                <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-end justify-between gap-4">
                   <div className="space-y-2 min-w-0">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-md truncate">
                       {title}
@@ -117,17 +134,30 @@ export function MediaDetailModal({ media, isOpen, onClose }: MediaDetailModalPro
                     </div>
                   </div>
 
-                  {trailer && (
+                  <div className="flex items-center gap-3 shrink-0">
+                    {trailer && (
+                      <Button
+                        variant="primary"
+                        size="md"
+                        icon={<Play className="w-4 h-4 fill-red-600 text-red-600" />}
+                        onClick={() => setIsPlayingTrailer(true)}
+                        className="shadow-xl"
+                      >
+                        Watch Trailer
+                      </Button>
+                    )}
+
                     <Button
-                      variant="primary"
+                      variant={isSaved ? 'danger' : 'secondary'}
                       size="md"
-                      icon={<Play className="w-4 h-4 fill-red-600 text-red-600" />}
-                      onClick={() => setIsPlayingTrailer(true)}
-                      className="shadow-xl shrink-0"
+                      icon={isSaved ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                      onClick={handleToggleWatchlist}
+                      disabled={isTogglePending}
+                      className="shadow-xl"
                     >
-                      Watch Trailer
+                      {isSaved ? 'In Watchlist' : 'Watchlist'}
                     </Button>
-                  )}
+                  </div>
                 </div>
               </>
             )}
