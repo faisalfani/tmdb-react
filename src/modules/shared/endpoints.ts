@@ -7,6 +7,11 @@ export const TMDB_ENDPOINTS = {
     UPCOMING: '/movie/upcoming',
     DETAILS: (id: number) => `/movie/${id}`,
   },
+  TV: {
+    POPULAR: '/tv/popular',
+    TOP_RATED: '/tv/top_rated',
+    DETAILS: (id: number) => `/tv/${id}`,
+  },
   SEARCH: {
     MULTI: '/search/multi',
   },

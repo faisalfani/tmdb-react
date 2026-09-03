@@ -13,6 +13,7 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { id: 'movies', label: 'Movies', to: '/' },
+  { id: 'tv', label: 'TV Shows', to: '/tv' },
   { id: 'watchlist', label: 'Watchlist', to: '/watchlist', showBadge: true },
 ];
 

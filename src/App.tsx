@@ -6,6 +6,7 @@ import { MediaDetailModal } from '@/views/shared/components/MediaDetailModal';
 import { MoviesView } from '@/views/movies';
 import { SearchView } from '@/views/search';
 import { RootLayout } from '@/views/shared/layouts/RootLayout';
+import { TvShowsView } from '@/views/tv';
 import { WatchlistView } from '@/views/watchlist';
 
 export function App() {
@@ -24,6 +25,7 @@ export function App() {
       <Routes>
         <Route element={<RootLayout />}>
           <Route path="/" element={<MoviesView onMediaSelect={handleMediaSelect} />} />
+          <Route path="/tv" element={<TvShowsView onMediaSelect={handleMediaSelect} />} />
           <Route path="/watchlist" element={<WatchlistView onMediaSelect={handleMediaSelect} />} />
           <Route path="/search" element={<SearchView onMediaSelect={handleMediaSelect} />} />
         </Route>
