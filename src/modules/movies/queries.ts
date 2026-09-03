@@ -29,3 +29,10 @@ export const useNowPlayingMovies = (page = 1) => {
     queryFn: () => moviesService.getNowPlayingMovies(page),
   });
 };
+
+export const useUpcomingMovies = (page = 1) => {
+  return useQuery<MediaItem[]>({
+    queryKey: ['movies', 'upcoming', page],
+    queryFn: () => moviesService.getUpcomingMovies(page),
+  });
+};

@@ -30,4 +30,11 @@ export const moviesService = {
     });
     return response.data.results.map((item) => ({ ...item, media_type: 'movie' as MediaType }));
   },
+
+  getUpcomingMovies: async (page = 1): Promise<MediaItem[]> => {
+    const response = await apiClient.get<TMDBResponse<MediaItem>>(TMDB_ENDPOINTS.MOVIES.UPCOMING, {
+      params: { page },
+    });
+    return response.data.results.map((item) => ({ ...item, media_type: 'movie' as MediaType }));
+  },
 };

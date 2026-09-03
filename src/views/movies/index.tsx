@@ -1,4 +1,4 @@
-import { useNowPlayingMovies, usePopularMovies, useTopRatedMovies } from '@/modules/movies/queries';
+import { useNowPlayingMovies, usePopularMovies, useTopRatedMovies, useUpcomingMovies } from '@/modules/movies/queries';
 import type { MediaItem } from '@/modules/shared/types';
 import { HeroMovieBanner } from '@/views/movies/HeroMovieBanner';
 import { MediaCarousel } from '@/views/shared/components/MediaCarousel';
@@ -11,6 +11,7 @@ export function MoviesView({ onMediaSelect }: MoviesViewProps) {
   const { data: popular, isLoading: popularLoading } = usePopularMovies();
   const { data: topRated, isLoading: topRatedLoading } = useTopRatedMovies();
   const { data: nowPlaying, isLoading: nowPlayingLoading } = useNowPlayingMovies();
+  const { data: upcoming, isLoading: upcomingLoading } = useUpcomingMovies();
 
   return (
     <div className="space-y-4 pb-16">
@@ -33,6 +34,12 @@ export function MoviesView({ onMediaSelect }: MoviesViewProps) {
           title="Now Playing in Theatres"
           items={nowPlaying}
           isLoading={nowPlayingLoading}
+          onItemClick={onMediaSelect}
+        />
+        <MediaCarousel
+          title="Upcoming Movies"
+          items={upcoming}
+          isLoading={upcomingLoading}
           onItemClick={onMediaSelect}
         />
       </div>
